@@ -42,7 +42,9 @@ class GameData:
         params["locale"] = locale,
         params["access_token"] = token
 
-        return await self.api.get_resource(hostname, endpoint, params)
+        headers = {"Authorization": f"Bearer {token}"}
+
+        return await self.api.get_resource(hostname, endpoint, params, headers=headers)
 
 # region Achievement API
 
