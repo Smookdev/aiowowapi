@@ -74,6 +74,8 @@ class API:
 
         self.__is_context_manager: bool = False
 
+        self.token = None
+
     def __enter__(self) -> None:
         # We don't want to use this, so we'll just raise an error
         raise TypeError("Use 'async with' instead")
@@ -309,12 +311,13 @@ class API:
                         "GET": self.__session.get,
                         "POST": self.__session.post,
                     }
-
-                    access_token = self.__access_tokens[self.__client_region.name]['Token']
-                    headers = {'Authorization': f'Bearer {access_token}'}
+                    
+                    if not self.token:
+                        self.token = await self.get_access_token()
+                    headers = {'Authorization': f'Bearer {self.token}'}
                     if "access_token" in params:
                         params.pop("access_token")
-                    
+
                     # If the user has selected an invalid HTTP method, we'll
                     # raise an exception
                     if method.upper() not in supported_methods:
@@ -327,9 +330,10 @@ class API:
                     async with supported_methods[method](
                             hostname.format(api_endpoint=api_endpoint),
                             params=params,
-                            auth=auth
+                            auth=auth,
+                            headers=headers
                     ) as response:
-
+                        print(response)
                         # If the response is successful, we'll return the
                         # response as a JSON dictionary
                         if response.status == 200:
