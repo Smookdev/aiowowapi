@@ -310,11 +310,14 @@ class API:
                         "POST": self.__session.post,
                     }
                     
+                    token = None
                     if "access_token" in params:
                         token = params["access_token"]
-                        headers = {'Authorization': f'Bearer {token}'}
                         params.pop("access_token")
+                    else:
+                        token = await self.get_access_token()
                     
+                    headers = {'Authorization': f'Bearer {token}'}
                     self.__session.headers = headers
 
                     # If the user has selected an invalid HTTP method, we'll
