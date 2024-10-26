@@ -310,6 +310,11 @@ class API:
                         "POST": self.__session.post,
                     }
 
+                    access_token = self.__access_tokens[self.__client_region.name]['Token']
+                    headers = {'Authorization': f'Bearer {access_token}'}
+                    if "access_token" in params:
+                        params.pop("access_token")
+                    
                     # If the user has selected an invalid HTTP method, we'll
                     # raise an exception
                     if method.upper() not in supported_methods:
