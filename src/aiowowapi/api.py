@@ -258,7 +258,7 @@ class API:
                            params: Optional[dict] = None,
                            auth: Optional[aiohttp.BasicAuth] = None,
                            method: Optional[str] = "GET",
-                           ) -> Optional[dict]:
+                           headers: Optional[dict] = None) -> Optional[dict]:
         """Make an API request and return the response as a JSON dictionary
 
         :param hostname: The hostname to make the request to
@@ -310,14 +310,6 @@ class API:
                         "POST": self.__session.post,
                     }
                     
-                    token = None
-                    if "access_token" in params:
-                        token = params["access_token"]
-                    else:
-                        token = await self.get_access_token()
-                    print(token)
-                    
-                    headers = {'Authorization': f'Bearer {token}'}
                     self.__session.headers = headers
 
                     # If the user has selected an invalid HTTP method, we'll
@@ -335,7 +327,6 @@ class API:
                             auth=auth,
                             headers=headers
                     ) as response:
-                        print(response)
                         # If the response is successful, we'll return the
                         # response as a JSON dictionary
                         if response.status == 200:
