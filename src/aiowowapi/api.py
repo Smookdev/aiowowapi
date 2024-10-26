@@ -313,9 +313,9 @@ class API:
                     token = None
                     if "access_token" in params:
                         token = params["access_token"]
-                        params.pop("access_token")
                     else:
                         token = await self.get_access_token()
+                    print(token)
                     
                     headers = {'Authorization': f'Bearer {token}'}
                     self.__session.headers = headers
