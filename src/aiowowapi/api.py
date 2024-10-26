@@ -309,8 +309,6 @@ class API:
                         "GET": self.__session.get,
                         "POST": self.__session.post,
                     }
-                    
-                    self.__session.headers = headers
 
                     # If the user has selected an invalid HTTP method, we'll
                     # raise an exception
